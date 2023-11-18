@@ -75,7 +75,7 @@ const SignUpSignIn = () => {
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          setErrorText(errorMessage);
+          setErrorText("Error: " + errorCode);
           setVisible(true);
           setSuccess(false);
           // ..
@@ -86,9 +86,12 @@ const SignUpSignIn = () => {
     }
   };
 
-  function createDoc() {
+  function createDoc(user) {
     //create a doc
     //Ensure that doc with the user ID does not exist
+    if (!user) {
+      return;
+    }
   }
   return (
     <div className="w-[100vw] h-[100vh] flex justify-center items-center">
@@ -218,7 +221,12 @@ const SignUpSignIn = () => {
         </div>
       </div>
 
-      <Error visible={visible} success={success} message={errorText} />
+      <Error
+        onClick={() => setVisible(false)}
+        visible={visible}
+        success={success}
+        message={errorText}
+      />
     </div>
   );
 };
