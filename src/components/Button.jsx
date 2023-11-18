@@ -1,9 +1,10 @@
 import React from "react";
 
-const Button = ({ text, onClick, outlined }) => {
+const Button = ({ text, onClick, outlined, disabled }) => {
   return (
     <>
       <button
+        disabled={disabled}
         className={`${
           !outlined
             ? " bg-theme text-white hover:bg-white hover:text-theme hover:border-2"
