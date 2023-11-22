@@ -1,25 +1,30 @@
 import React, { useEffect, useState } from "react";
 import Error from "../components/Error";
+import { useSelector } from "react-redux";
+import Header from "../components/Header";
 
 const Dashboard = () => {
   const [visible, setVisible] = useState(false);
   const [success, setSuccess] = useState(null);
   const [errorText, setErrorText] = useState("");
 
+  const user = useSelector((state) => state.user.user);
+
   useEffect(() => {
-    setVisible(true);
+    setErrorText(`Welcome to your DashBoard, ${user}`);
     setSuccess(true);
-    setErrorText("Login in success");
+    setVisible(true);
     setTimeout(() => {
-      setVisible(false);
-      setSuccess(null);
       setErrorText("");
+      setSuccess(null);
+      setVisible(false);
     }, 2000);
   }, []);
 
   return (
     <>
-      <div>Dashboard</div>
+      <Header />
+
       <Error
         onClick={() => setVisible(false)}
         visible={visible}

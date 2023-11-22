@@ -3,13 +3,18 @@ import { useState, useEffect } from "react";
 import Button from "./Button";
 import Error from "./Error";
 import validator from "validator";
-import { auth, db, doc, setDoc } from "../firebase";
+import { auth, db, doc, setDoc, provider } from "../firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  getAuth,
 } from "firebase/auth";
 import { getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { setUser } from "../slices/userSlice";
+import { useDispatch } from "react-redux";
 
 const SignUpSignIn = () => {
   const [name, setName] = useState("");
@@ -29,6 +34,7 @@ const SignUpSignIn = () => {
   const [loginForm, setLoginForm] = useState(false);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setTimeout(() => {
@@ -141,7 +147,7 @@ const SignUpSignIn = () => {
           setSuccess(true);
           setEmail("");
           setPassword("");
-
+          createDoc(user);
           navigate("/dashboard");
         })
         .catch((error) => {
@@ -156,6 +162,45 @@ const SignUpSignIn = () => {
         });
     }
   };
+
+  //Google Auth
+  const googleAuth = async () => {
+    setLoading(true);
+    try {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = credential.accessToken;
+          // The signed-in user info.
+          const user = result.user;
+
+          setErrorText("User authenticated via google");
+          setVisible(true);
+          setSuccess(true);
+          setLoading(false);
+          createDoc(user);
+          navigate("/dashboard");
+        })
+        .catch((error) => {
+          // Handle Errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorText("Error: " + errorCode);
+          setVisible(true);
+          setSuccess(false);
+          // ...
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } catch (err) {
+      setErrorText("Error: " + err);
+      setVisible(true);
+      setSuccess(false);
+    }
+  };
+
   return (
     <div className="w-[100vw] h-[100vh] flex justify-center items-center">
       {loginForm ? (
@@ -222,6 +267,13 @@ const SignUpSignIn = () => {
             text={loading ? "Loading..." : "Login"}
             outlined={false}
             onClick={loginUsingEmail}
+          />
+          <p className=" text-[1rem] font-medium">Or</p>
+          <Button
+            disabled={loading}
+            text={loading ? "Loading..." : "Login using Google"}
+            outlined={true}
+            onClick={googleAuth}
           />
           <p
             onClick={() => setLoginForm(false)}
@@ -352,7 +404,7 @@ const SignUpSignIn = () => {
               disabled={loading}
               text={loading ? "Loading..." : "Sign up using Google"}
               outlined={true}
-              onClick={() => console.log("clicked")}
+              onClick={googleAuth}
             />
             <p
               onClick={() => setLoginForm(true)}
