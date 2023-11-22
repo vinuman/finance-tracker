@@ -7,7 +7,7 @@ const Button = ({ text, onClick, outlined, disabled }) => {
         disabled={disabled}
         className={`${
           !outlined
-            ? " bg-theme text-white hover:bg-white hover:text-theme hover:border-2"
+            ? " bg-theme text-white hover:bg-white hover:text-theme hover:border hover-border-theme"
             : "bg-white text-theme border-2  hover:bg-theme hover:text-white"
         }  text-center w-[100%] my-[1rem] mx-0 py-[0.6rem] px-0 text-[1rem] rounded-md font-semibold  flex items-center justify-center h-auto transition-all duration-300`}
         onClick={onClick}

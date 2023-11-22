@@ -9,3 +9,10 @@
   --white: #fff;
   --shadowcolor: 0px 0px 30px 8px rgba(227, 227, 227, 0.75);
 }
+
+.ant-card-head-title {
+  margin: 0 !important;
+  font-weight: 600 !important;
+  font-family: "Montserrat", "sans-serif" !important;
+  font-size: 1.2rem;
+}
