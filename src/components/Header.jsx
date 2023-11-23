@@ -33,7 +33,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="py-4 px-8 bg-theme flex items-center justify-between sticky top-0 left-0 w-[100%]">
+      <div className="py-4 px-8 bg-theme flex items-center justify-between sticky top-0 left-0 w-[100%] z-30">
         <p className=" text-white font-bold text-[1.4rem] tracking-wider">
           Financely.
         </p>

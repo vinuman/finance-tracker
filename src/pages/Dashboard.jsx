@@ -9,6 +9,7 @@ import { auth, db } from "../firebase";
 import { addDoc, collection, getDocs, query } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import moment from "moment";
+import TransactionTable from "../components/TransactionTable";
 
 const Dashboard = () => {
   const [user] = useAuthState(auth);
@@ -19,6 +20,9 @@ const Dashboard = () => {
   const [isIncomeModalVisible, setIsIncomeModalVisible] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [totalBalance, setTotalBalance] = useState(0);
+  const [income, setIncome] = useState(0);
+  const [expenses, setExpenses] = useState(0);
 
   const sampleTransactions = [
     {
@@ -84,6 +88,9 @@ const Dashboard = () => {
       setErrorText(`Transaction added`);
       setSuccess(true);
       setVisible(true);
+      let newArr = transactions;
+      newArr.push(transaction);
+      setTransactions(newArr);
     } catch (e) {
       setErrorText(`Error: ${e}`);
       setSuccess(false);
@@ -91,32 +98,54 @@ const Dashboard = () => {
     }
   }
 
-  async function fetchTransactions() {
+  const fetchTransactions = async () => {
     setLoading(true);
     if (user) {
       const q = query(collection(db, `users/${user.uid}/transactions`));
-      const querySnapshot = await getDocs(q);
-      let transactionsArray = [];
-      querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        transactionsArray.push(doc.data());
-      });
-      setTransactions(transactionsArray);
+      try {
+        const querySnapshot = await getDocs(q);
+        let transactionsArray = [];
+        querySnapshot.forEach((doc) => {
+          transactionsArray.push(doc.data());
+        });
+        setTransactions(transactionsArray);
+      } catch (e) {
+        setErrorText(`Error fetching transactions: ${e}`);
+        setSuccess(false);
+        setVisible(true);
+      }
     }
     setLoading(false);
-  }
+  };
+
+  const calculateBalance = () => {
+    let incomeTotal = 0;
+    let expensesTotal = 0;
+
+    transactions.forEach((transaction) => {
+      if (transaction.type === "income") {
+        incomeTotal += transaction.amount;
+      } else {
+        expensesTotal += transaction.amount;
+      }
+    });
+
+    setIncome(incomeTotal);
+    setExpenses(expensesTotal);
+    setTotalBalance(incomeTotal - expensesTotal);
+  };
 
   useEffect(() => {
     setErrorText(`Welcome to your DashBoard, ${user}`);
     setSuccess(true);
     setVisible(true);
-
+    fetchTransactions();
     setTimeout(() => {
       setErrorText("");
       setSuccess(null);
       setVisible(false);
     }, 2000);
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {
@@ -126,24 +155,38 @@ const Dashboard = () => {
     }, 2000);
   }, [visible]);
 
+  useEffect(() => {
+    calculateBalance();
+  }, [transactions]);
+
   return (
     <>
       <Header />
-      <Cards
-        showExpenseModal={showExpenseModal}
-        showIncomeModal={showIncomeModal}
-      />
-      <AddExpenseModal
-        isExpenseModalVisible={isExpenseModalVisible}
-        handleExpenseCancel={handleExpenseCancel}
-        onFinish={onFinish}
-      />
-      <AddIncomeModal
-        isIncomeModalVisible={isIncomeModalVisible}
-        handleIncomeCancel={handleIncomeCancel}
-        onFinish={onFinish}
-      />
-
+      {loading ? (
+        <div>Loading</div>
+      ) : (
+        <>
+          {" "}
+          <Cards
+            showExpenseModal={showExpenseModal}
+            showIncomeModal={showIncomeModal}
+            income={income}
+            expenses={expenses}
+            totalBalance={totalBalance}
+          />
+          <TransactionTable transactions={transactions} />
+          <AddExpenseModal
+            isExpenseModalVisible={isExpenseModalVisible}
+            handleExpenseCancel={handleExpenseCancel}
+            onFinish={onFinish}
+          />
+          <AddIncomeModal
+            isIncomeModalVisible={isIncomeModalVisible}
+            handleIncomeCancel={handleIncomeCancel}
+            onFinish={onFinish}
+          />
+        </>
+      )}
       <Error
         onClick={() => setVisible(false)}
         visible={visible}
