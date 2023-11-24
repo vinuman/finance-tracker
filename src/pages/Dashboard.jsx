@@ -10,6 +10,7 @@ import { addDoc, collection, getDocs, query } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import moment from "moment";
 import TransactionTable from "../components/TransactionTable";
+import Loader from "../components/Loader";
 
 const Dashboard = () => {
   const [user] = useAuthState(auth);
@@ -67,7 +68,7 @@ const Dashboard = () => {
   const onFinish = (values, type) => {
     const newTransaction = {
       type: type,
-      date: moment(values.date).format("YYYY-MM-DD"),
+      date: values.date.format("YYYY-MM-DD"),
       amount: parseFloat(values.amount),
       tag: values.tag,
       name: values.name,
@@ -84,7 +85,7 @@ const Dashboard = () => {
         collection(db, `users/${user.uid}/transactions`),
         transaction
       );
-      console.log("Document written with ID: ", docRef.id);
+
       setErrorText(`Transaction added`);
       setSuccess(true);
       setVisible(true);
@@ -136,7 +137,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    setErrorText(`Welcome to your DashBoard, ${user}`);
+    setErrorText(`Welcome to your DashBoard, ${user.displayName}`);
     setSuccess(true);
     setVisible(true);
     fetchTransactions();
@@ -145,7 +146,7 @@ const Dashboard = () => {
       setSuccess(null);
       setVisible(false);
     }, 2000);
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -163,7 +164,7 @@ const Dashboard = () => {
     <>
       <Header />
       {loading ? (
-        <div>Loading</div>
+        <Loader />
       ) : (
         <>
           {" "}

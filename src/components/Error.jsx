@@ -12,12 +12,12 @@ const Error = ({ message, visible, success, onClick }) => {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 100 }}
           transition={{ duration: 0.4 }}
-          className={`w-[300px] min-h-[48px] h-auto rounded-lg absolute border-2 shadow-xl top-4 right-4 justify-center items-center p-4 ${
+          className={`w-[300px] min-h-[48px] h-auto rounded-lg absolute border-2 shadow-xl top-4 right-4 justify-center items-center p-4 z-50 ${
             success ? "bg-green-700" : "bg-red-700"
           }`}
         >
           <p className="text-white text-[1.2rem] font-normal tracking-wide">
-            {message} !
+            {message}
           </p>
 
           <div
