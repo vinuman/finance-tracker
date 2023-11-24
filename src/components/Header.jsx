@@ -38,17 +38,14 @@ const Header = () => {
           Financely.
         </p>
         <div className="flex items-center justify-around w-[8rem]">
-          {user && location.pathname !== "/" && (
+          {user?.photoURL && location.pathname !== "/" && (
             <img
-              className="w-[3rem] rounded-full"
-              src={
-                user.photoURL
-                  ? user.photoURL
-                  : "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.flaticon.com%2Ffree-icon%2Fuser_9131529&psig=AOvVaw3u9q--SXdq-u7FTWgEQcfy&ust=1700919899969000&source=images&cd=vfe&ved=0CBIQjRxqFwoTCJCVt8Xi3IIDFQAAAAAdAAAAABAE"
-              }
+              className="w-[2.2rem] rounded-full"
+              src={user.photoURL ? user.photoURL : ""}
               alt="display pic"
             ></img>
           )}
+
           {location.pathname !== "/" && (
             <p
               onClick={logoutfnc}

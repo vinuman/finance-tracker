@@ -8,7 +8,6 @@ import AddIncomeModal from "../components/modals/AddIncome";
 import { auth, db } from "../firebase";
 import { addDoc, collection, getDocs, query } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
-import moment from "moment";
 import TransactionTable from "../components/TransactionTable";
 import Loader from "../components/Loader";
 
@@ -137,10 +136,20 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    setErrorText(`Welcome to your DashBoard, ${user.displayName}`);
-    setSuccess(true);
-    setVisible(true);
-    fetchTransactions();
+    if (user?.displayName) {
+      setErrorText(`Welcome to your DashBoard, ${user.displayName}`);
+      setSuccess(true);
+      setVisible(true);
+      fetchTransactions();
+      console.log(user);
+    } else if (user) {
+      setErrorText(`Welcome to your DashBoard, ${user.email.split("@")[0]}`);
+      setSuccess(true);
+      setVisible(true);
+      fetchTransactions();
+      console.log(user);
+    }
+
     setTimeout(() => {
       setErrorText("");
       setSuccess(null);

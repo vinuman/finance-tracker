@@ -73,7 +73,7 @@ const SignUpSignIn = () => {
         .then((userCredential) => {
           // Signed up
           const user = userCredential.user;
-          console.log(user.uid);
+          console.log("signed up>>", user);
           setErrorText("user created");
           setVisible(true);
           setSuccess(true);
@@ -106,13 +106,12 @@ const SignUpSignIn = () => {
       const userDocRef = doc(db, "users", user.uid);
       const userData = await getDoc(userDocRef);
       if (!userData.exists()) {
-        const { displayName, email, photoURL } = user;
         const createdAt = new Date();
         try {
           await setDoc(userDocRef, {
-            name: displayName ? displayName : name,
+            name: user.displayName ? user.displayName : name,
             email,
-            photoURL: photoURL ? photoURL : "",
+            photoURL: user.photoURL ? user.photoURL : "",
             createdAt,
           });
         } catch (err) {
