@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Table, Select, Radio } from "antd";
 import Button from "./Button";
+import { unparse } from "papaparse";
 
 const TransactionTable = ({ transactions }) => {
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
   const [sortKey, setSortKey] = useState("");
   const [selectedTag, setSelectedTag] = useState("");
+
   const columns = [
     {
       title: "Name",
@@ -51,6 +53,20 @@ const TransactionTable = ({ transactions }) => {
     }
   });
 
+  function exportToCsv() {
+    const csv = unparse(transactions, {
+      fields: ["name", "type", "date", "amount", "tag"],
+    });
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "transactions.csv";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   return (
     <>
       <div className="w-[100%] h-[48px] flex items-center gap-4 my-2  justify-center">
@@ -92,13 +108,12 @@ const TransactionTable = ({ transactions }) => {
           </Radio.Group>
         </div>
         <div className="flex items-center gap-4 w-[320px]">
-          <Button outlined={true} text="Export to CSV" />
-          <Button outlined={false} text="Import from CSV" />
+          <Button onClick={exportToCsv} outlined={false} text="Export to CSV" />
         </div>
       </div>
 
       <Table
-        className="py-4 px-8"
+        className="py-4 px-16"
         dataSource={filteredTransactions}
         columns={columns}
       />
