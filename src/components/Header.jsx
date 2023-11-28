@@ -40,7 +40,7 @@ const Header = () => {
         <div className="flex items-center justify-around w-[8rem]">
           {user?.photoURL && location.pathname !== "/" && (
             <img
-              className="w-[2.2rem] rounded-full"
+              className="w-[2rem] h-[2rem] rounded-full"
               src={user.photoURL ? user.photoURL : ""}
               alt="display pic"
             ></img>

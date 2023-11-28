@@ -10,6 +10,7 @@ import { addDoc, collection, getDocs, query } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import TransactionTable from "../components/TransactionTable";
 import Loader from "../components/Loader";
+import Charts from "../components/Charts";
 
 const Dashboard = () => {
   const [user] = useAuthState(auth);
@@ -135,6 +136,10 @@ const Dashboard = () => {
     setTotalBalance(incomeTotal - expensesTotal);
   };
 
+  let sortedTransactions = transactions.sort((a, b) => {
+    return new Date(a.date) - new Date(b.date);
+  });
+
   useEffect(() => {
     if (user?.displayName) {
       setErrorText(`Welcome to your DashBoard, ${user.displayName}`);
@@ -176,7 +181,6 @@ const Dashboard = () => {
         <Loader />
       ) : (
         <>
-          {" "}
           <Cards
             showExpenseModal={showExpenseModal}
             showIncomeModal={showIncomeModal}
@@ -184,7 +188,16 @@ const Dashboard = () => {
             expenses={expenses}
             totalBalance={totalBalance}
           />
-          <TransactionTable transactions={transactions} />
+          {transactions.length ? (
+            <>
+              {" "}
+              <Charts sortedTransactions={sortedTransactions} />{" "}
+              <TransactionTable transactions={transactions} />
+            </>
+          ) : (
+            ""
+          )}
+
           <AddExpenseModal
             isExpenseModalVisible={isExpenseModalVisible}
             handleExpenseCancel={handleExpenseCancel}
