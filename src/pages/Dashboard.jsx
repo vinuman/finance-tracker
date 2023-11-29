@@ -10,7 +10,7 @@ import { addDoc, collection, getDocs, query } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import TransactionTable from "../components/TransactionTable";
 import Loader from "../components/Loader";
-import Charts from "../components/Charts";
+
 import TransactionsEmpty from "../components/TransactionsEmpty";
 
 const Dashboard = () => {
@@ -190,11 +190,7 @@ const Dashboard = () => {
             totalBalance={totalBalance}
           />
           {transactions && transactions.length !== 0 ? (
-            <>
-              {" "}
-              <Charts sortedTransactions={sortedTransactions} />{" "}
-              <TransactionTable transactions={transactions} />
-            </>
+            <TransactionTable transactions={transactions} />
           ) : (
             <TransactionsEmpty />
           )}

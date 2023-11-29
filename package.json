@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@ant-design/charts": "^1.4.3",
     "@reduxjs/toolkit": "^1.9.7",
     "antd": "^5.11.2",
     "firebase": "^10.6.0",
