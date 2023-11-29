@@ -7,7 +7,7 @@ const Charts = ({ sortedTransactions }) => {
   });
 
   const spendingData = sortedTransactions.filter((transactions) => {
-    if (transactions.type == "expenses") {
+    if (transactions.type == "expense") {
       return { tag: transactions.tag, amount: transactions.amount };
     }
   });
@@ -37,31 +37,31 @@ const Charts = ({ sortedTransactions }) => {
 
   spendingData.forEach((item) => {
     switch (item.tag) {
-      case "Food":
+      case "food":
         newSpendings[0].amount += item.amount;
         break;
-      case "Drinks":
+      case "drinks":
         newSpendings[1].amount += item.amount;
         break;
-      case "Education":
+      case "education":
         newSpendings[2].amount += item.amount;
         break;
-      case "Office":
+      case "office":
         newSpendings[3].amount += item.amount;
         break;
-      case "Grocery":
+      case "grocery":
         newSpendings[4].amount += item.amount;
         break;
-      case "Fuel":
+      case "fuel":
         newSpendings[5].amount += item.amount;
         break;
-      case "Monthly fixed bills":
+      case "bills":
         newSpendings[6].amount += item.amount;
         break;
-      case "Pet Care":
+      case "pet":
         newSpendings[7].amount += item.amount;
         break;
-      case "Cigarette":
+      case "cig":
         newSpendings[8].amount += item.amount;
         break;
       default:
@@ -72,7 +72,7 @@ const Charts = ({ sortedTransactions }) => {
 
   const config = {
     data: data,
-    width: 800,
+    width: 1200,
     height: 400,
     autoFit: false,
     xField: "date",
@@ -80,7 +80,7 @@ const Charts = ({ sortedTransactions }) => {
   };
   const spendingConfig = {
     data: newSpendings,
-    width: 800,
+    width: 300,
     angleField: "amount",
     colorField: "tag",
   };
@@ -90,16 +90,16 @@ const Charts = ({ sortedTransactions }) => {
 
   return (
     <>
-      <div className="flex justify-between items-center h-auto w-[95%] p-[2rem] rounded-md shadow-md">
-        <div>
-          <h2>Your chart</h2>
+      <div className="flex flex-col items-center justify-center gap-8 h-auto w-[100%] p-8 mb-8 rounded-md">
+        <div className="shadow-md p-4 w-[100%]">
+          <h2 className="text-[1.2rem] mb-8">Spending Graph</h2>
           <Line
             {...config}
             onReady={(chartInstance) => (chart = chartInstance)}
           />
         </div>
-        <div>
-          <h2>Your Pie chart</h2>
+        <div className="shadow-md p-4 w-[100%]">
+          <h2 className="text-[1.2rem] mb-8 ml-8">Spending chart</h2>
           <Pie
             {...spendingConfig}
             onReady={(chartInstance) => (pieChart = chartInstance)}
