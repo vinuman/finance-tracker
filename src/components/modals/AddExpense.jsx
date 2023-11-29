@@ -73,15 +73,21 @@ function AddExpenseModal({
         >
           <Select className="select-input-2">
             <Select.Option value="food">Food</Select.Option>
+            <Select.Option value="drinks">Drinks</Select.Option>
             <Select.Option value="education">Education</Select.Option>
             <Select.Option value="office">Office</Select.Option>
-            <Select.Option value="office">Grocery</Select.Option>
+            <Select.Option value="grocery">Grocery</Select.Option>
+            <Select.Option value="fuel">Fuel</Select.Option>
+            <Select.Option value="bills">Monthly fixed bills</Select.Option>
+            <Select.Option value="pet">Pet Care</Select.Option>
+            <Select.Option value="cig">Cigarette</Select.Option>
+            <Select.Option value="others">Others</Select.Option>
 
             {/* Add more tags here */}
           </Select>
         </Form.Item>
         <Form.Item>
-          <Button className="btn btn-blue" type="primary" htmlType="submit">
+          <Button className="btn bg-blue-500" type="primary" htmlType="submit">
             Add Expense
           </Button>
         </Form.Item>

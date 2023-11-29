@@ -11,6 +11,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import TransactionTable from "../components/TransactionTable";
 import Loader from "../components/Loader";
 import Charts from "../components/Charts";
+import TransactionsEmpty from "../components/TransactionsEmpty";
 
 const Dashboard = () => {
   const [user] = useAuthState(auth);
@@ -188,14 +189,14 @@ const Dashboard = () => {
             expenses={expenses}
             totalBalance={totalBalance}
           />
-          {transactions.length ? (
+          {transactions && transactions.length !== 0 ? (
             <>
               {" "}
               <Charts sortedTransactions={sortedTransactions} />{" "}
               <TransactionTable transactions={transactions} />
             </>
           ) : (
-            ""
+            <TransactionsEmpty />
           )}
 
           <AddExpenseModal
