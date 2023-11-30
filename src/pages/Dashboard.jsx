@@ -188,6 +188,7 @@ const Dashboard = () => {
             income={income}
             expenses={expenses}
             totalBalance={totalBalance}
+            setTransactions={setTransactions}
           />
           {transactions && transactions.length !== 0 ? (
             <TransactionTable transactions={transactions} />
